@@ -124,7 +124,6 @@ class Verify extends React.Component {
         this.props.createAUser(user);
 
       }).then( () => {
-
         const book = {
           startDate: this.state.startDate,
           endDate: this.state.endDate,
