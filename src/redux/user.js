@@ -1,18 +1,16 @@
 import axios from 'axios';
 
 const SET_A_USER = 'SET_A_USER';
-const CREATE_A_USER = 'CREATE_A_USER';
-const DELETE_A_USER = 'DELETE_A_USER';
+const AUTHENTICATED = 'AUTHENTICATED';
+const UNAUTHENTICATED = 'UNAUTHENTICATED';
 const UPDATE_A_USER = 'UPDATE_A_USER';
 
 const reducer = (state = [], action) => {
   switch (action.type) {
-    case CREATE_A_USER:
+    case AUTHENTICATED:
       return state = action.user;
-    case UPDATE_A_USER:
-      return state = action.user;
-    case DELETE_A_USER:
-      return Object.assign({}, state, { user: {} });
+    case UNAUTHENTICATED:
+      return state = [];
     case SET_A_USER:
       return state;
     default:
@@ -22,7 +20,7 @@ const reducer = (state = [], action) => {
 
 const fetchUser = () => {
   return (dispatch) => {
-    return axios.get('/api/user')
+    return axios.get('/api/user/me')
       .then(result => result.data)
       .then(users => dispatch({
         type: SET_A_USER,
@@ -31,38 +29,23 @@ const fetchUser = () => {
   }
 }
 
-const createAUser = (user, history) => {
+const getLoggedIn = (user, history) => {
   return (dispatch) => {
-    return axios.post('/api/user', user)
+    return axios.post('/api/user/me', user)
       .then(result => result.data)
       .then(user => dispatch({
-        type: CREATE_A_USER,
+        type: AUTHENTICATED,
         user
       }))
   };
 };
 
-const updateAUser = (user, history, id) => {
+const getLogout = (user, history) => {
   return (dispatch) => {
-    return axios.put(`/api/user/${user.id}`, user)
-      .then(result => result.data)
-      .then(user => dispatch({
-        type: UPDATE_A_USER,
-        user
-      }))
-  }
-}
-
-const deleteAUser = (user, history) => {
-  return (dispatch) => {
-    return axios.delete(`/api/user/${user.id}`)
-      .then(() => dispatch({
-        type: DELETE_USER,
-        user
-      }))
+    dispatch({ type: UNAUTHENTICATED })
   }
 }
 
 export default reducer;
 
-export { fetchUser, createAUser, deleteAUser, updateAUser };
+export { fetchUser, getLoggedIn, getLogout };

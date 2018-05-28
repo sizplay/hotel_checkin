@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/face', {
+const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/faces', {
   define: {
     timestamps: false,
     underscored: true

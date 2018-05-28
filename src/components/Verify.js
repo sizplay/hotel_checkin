@@ -2,11 +2,10 @@ import React from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import DateTime from 'react-datetime';
+//import DateTime from 'react-datetime';
 
 import { createUser } from '../redux/users';
-import { createBook } from '../redux/books';
-import { createAUser, updateAUser } from '../redux/user';
+import { getLoggedIn, getLogout } from '../redux/user';
 
 class Verify extends React.Component {
 
@@ -17,20 +16,19 @@ class Verify extends React.Component {
     this.capture = this.capture.bind(this);
     this.enroll = this.enroll.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onChangeCal = this.onChangeCal.bind(this);
+    //this.onChangeCal = this.onChangeCal.bind(this);
     this.delete = this.delete.bind(this);
   }
 
   states(props) {
     return {
-      gender: '',
       load: false,
       register: false,
       name: '',
       faceId: '',
-      room: '',
-      startDate: '',
-      endDate: '',
+      age: 0,
+      gender: '',
+      race: ''
     }
   }
 
@@ -79,12 +77,10 @@ class Verify extends React.Component {
             })
         } else {
           const faceID = response.data.images[0].transaction.face_id;
+          localStorage.setItem('user', faceID);
           const user = this.props.users.find(user => user.faceId === faceID);
-
-          this.setState({
-            load: false
-          });
-          this.props.updateAUser(user);
+          this.setState({ load: false });
+          this.props.getLoggedIn(user);
           this.props.history.push('/welcome');
         }
       });
@@ -109,28 +105,37 @@ class Verify extends React.Component {
       }).then((response) => {
         if (response.data.images) {
           if (response.data.images[0].transaction)
-            this.setState({
-              faceId: response.data.images[0].transaction.face_id,
-              room: 302,
-              load: false,
-              startDate: new Date()
-            })
+            var race = [
+              { race: 'asian', value: response.data.images[0].attributes.asian },
+              { race: 'black', value: response.data.images[0].attributes.black },
+              { race: 'hispanic', value: response.data.images[0].attributes.hispanic },
+              { race: 'white', value: response.data.images[0].attributes.asian },
+            ]
+
+          const tmpRace = race.reduce((current, next) => {
+            if (current.value < next.value) {
+              current = next;
+            }
+            return current
+          })
+
+          this.setState({
+            faceId: response.data.images[0].transaction.face_id,
+            load: false,
+            age: response.data.images[0].attributes.age,
+            race:tmpRace.race
+          })
         }
+
         const user = {
           name: this.state.name,
-          faceId: this.state.faceId
+          faceId: this.state.faceId,
+          age: this.state.age,
+          gender: this.state.gender,
+          race: this.state.race
         }
         this.props.createUser(user);
-        this.props.createAUser(user);
-
-      }).then( () => {
-        const book = {
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
-          room: this.state.room,
-          user_id: 1
-        }
-        this.props.createBook(book);
+        this.props.getLoggedIn(user);
         this.props.history.push('/welcome');
       })
   }
@@ -153,17 +158,18 @@ class Verify extends React.Component {
         this.setState({
           load: false,
         })
+        this.props.getLogout();
       }
-    )
+      )
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onChangeCal(date) {
-    this.setState({ endDate: date._d })
-  }
+  // onChangeCal(date) {
+  //   this.setState({ endDate: date._d })
+  // }
 
   render() {
     const { register, name, gender } = this.state;
@@ -181,7 +187,7 @@ class Verify extends React.Component {
               <div className='text-center mt-5'>
                 <h4>Hello<span className='text-danger'>{gender == 'M' ? ' Sir, ' : ' Ma\'am '}</span>
                   Welcome to our Hotel</h4>
-                <h4>Please check in your name and checkout date</h4>
+                <h4>Please register your name</h4>
               </div>
               <div className='row'>
                 <div className='col-md-4' />
@@ -193,16 +199,7 @@ class Verify extends React.Component {
                   width={480}
                 />
               </div>
-              <div className='row mt-3'>
-                <div className='col-md-4' />
-                <div className='col-md-3'>
-                  <h5 className='text-center'>Checkout Date</h5>
-                  <DateTime
-                    dateFormat='YYYY-MM-DD'
-                    onChange={this.onChangeCal}
-                  />
-                </div>
-              </div>
+
               <div className='row mt-3'>
                 <div className='input-group col-md-4' />
                 <input
@@ -259,10 +256,20 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createUser: (user) => dispatch(createUser(user)),
     createBook: (book) => dispatch(createBook(book)),
-    createAUser: (user) => dispatch(createAUser(user)),
-    updateAUser: (user) => dispatch(updateAUser(user))
+    getLoggedIn: (user) => dispatch(getLoggedIn(user)),
+    getLogout: () => dispatch(getLogout())
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Verify);
 
+/** <div className='row mt-3'>
+                <div className='col-md-4' />
+                <div className='col-md-3'>
+                  <h5 className='text-center'>Checkout Date</h5>
+                  <DateTime
+                    dateFormat='YYYY-MM-DD'
+                    onChange={this.onChangeCal}
+                  />
+                </div>
+              </div> */

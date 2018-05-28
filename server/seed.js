@@ -4,7 +4,7 @@ console.log('Syncing database');
 db.sync()
   .then(() => {
     console.log('Seeding database');
-    db.seed()
+    db.seed();
   })
   .then(() => console.log('Seeding successful'))
   .catch(err => {

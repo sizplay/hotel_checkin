@@ -3,7 +3,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { fetchUsers } from '../redux/users';
-import { fetchUser } from '../redux/user';
+import { fetchUser, getLoggedIn } from '../redux/user';
 import { fetchBooks } from '../redux/books';
 
 import Nav from './Nav';
@@ -16,7 +16,7 @@ class Root extends React.Component {
   componentDidMount() {
     this.props.fetchUsers();
     this.props.fetchBooks();
-    this.props.fetchUser();
+    this.props.getLoggedIn();
   }
 
   render() {
@@ -38,8 +38,8 @@ class Root extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchUsers: () => dispatch(fetchUsers()),
-    fetchUser: () => dispatch(fetchUser()),
-    fetchBooks: () => dispatch(fetchBooks())
+    fetchBooks: () => dispatch(fetchBooks()),
+    getLoggedIn: () => dispatch(getLoggedIn())
   }
 }
 

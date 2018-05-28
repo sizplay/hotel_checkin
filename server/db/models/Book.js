@@ -1,7 +1,7 @@
 const conn = require('../conn');
 const Sequelize = require('sequelize');
 
-const Book = conn.define('book', {
+const Book = conn.define('books', {
   startDate: {
     type: Sequelize.STRING,
   },
