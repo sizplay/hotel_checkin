@@ -12,7 +12,11 @@ const User = conn.define('users', {
   },
   gender: Sequelize.STRING,
   age: Sequelize.STRING,
-  race: Sequelize.STRING
+  race: Sequelize.STRING,
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  }
 });
 
 module.exports = User;

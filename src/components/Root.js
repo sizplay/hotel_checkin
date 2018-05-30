@@ -3,13 +3,14 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { fetchUsers } from '../redux/users';
-import { fetchUser, getLoggedIn } from '../redux/user';
+import { getLoggedIn } from '../redux/user';
 import { fetchBooks } from '../redux/books';
 
 import Nav from './Nav';
 import Verify from './Verify';
 import Welcome from './Welcome';
 import Hotel from './Hotel';
+import Book from './Book';
 
 class Root extends React.Component {
 
@@ -28,6 +29,7 @@ class Root extends React.Component {
             <Route exact path='/' component={Hotel} />
             <Route exact path='/verify' render={({ history }) => <Verify history={history} />} />
             <Route exact path='/welcome' render={({ history }) => <Welcome history={history} />} />
+            <Route exact path='/books' render={({ history }) => <Book history={history} />} />
           </div>
         </Router>
       </div>

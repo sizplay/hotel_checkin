@@ -27,22 +27,9 @@ class Welcome extends React.Component {
     }
     return (
       <div className='container'>
-        {
-          checkout ?
-            <h4 className='text-center mt-5'>Thank you for choosing our hotel!<br /> Good Bye {user.name}</h4>
-            :
-            <div>
-              <h4 className='text-center mt-5'>Welcome! {user.name}</h4>
-              <div className='row'>
-                <div className='col-md-10' />
-                <button onClick={this.checkout} className='btn btn-lg btn-primary mr-2'>Check Out</button>
-              </div>
-              <div>
-                <h4></h4>
-              </div>
-            </div>
-        }
-
+        <div>
+          <h4 className='text-center mt-5'>Welcome! {user.name}</h4>
+        </div>
       </div>
     )
   }

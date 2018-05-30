@@ -16,7 +16,6 @@ class Verify extends React.Component {
     this.capture = this.capture.bind(this);
     this.enroll = this.enroll.bind(this);
     this.onChange = this.onChange.bind(this);
-    //this.onChangeCal = this.onChangeCal.bind(this);
     this.delete = this.delete.bind(this);
   }
 
@@ -56,8 +55,6 @@ class Verify extends React.Component {
           app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
         }
       }).then((response) => {
-        console.log(response)
-
         if (response.data.Errors || response.data.images[0].transaction.message === 'no match found') {
           axios.post(`https://api.kairos.com/detect`, {
             gallery_name: "newGallery",
@@ -77,7 +74,6 @@ class Verify extends React.Component {
             })
         } else {
           const faceID = response.data.images[0].transaction.face_id;
-          localStorage.setItem('user', faceID);
           const user = this.props.users.find(user => user.faceId === faceID);
           this.setState({ load: false });
           this.props.getLoggedIn(user);
@@ -136,7 +132,7 @@ class Verify extends React.Component {
         }
         this.props.createUser(user);
         this.props.getLoggedIn(user);
-        this.props.history.push('/welcome');
+        this.props.history.push('/books');
       })
   }
 
@@ -154,7 +150,6 @@ class Verify extends React.Component {
           app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
         }
       }).then((response) => {
-        console.log(response)
         this.setState({
           load: false,
         })
@@ -166,10 +161,6 @@ class Verify extends React.Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-
-  // onChangeCal(date) {
-  //   this.setState({ endDate: date._d })
-  // }
 
   render() {
     const { register, name, gender } = this.state;
@@ -262,14 +253,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Verify);
-
-/** <div className='row mt-3'>
-                <div className='col-md-4' />
-                <div className='col-md-3'>
-                  <h5 className='text-center'>Checkout Date</h5>
-                  <DateTime
-                    dateFormat='YYYY-MM-DD'
-                    onChange={this.onChangeCal}
-                  />
-                </div>
-              </div> */

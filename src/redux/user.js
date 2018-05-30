@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const SET_A_USER = 'SET_A_USER';
 const AUTHENTICATED = 'AUTHENTICATED';
 const UNAUTHENTICATED = 'UNAUTHENTICATED';
 const UPDATE_A_USER = 'UPDATE_A_USER';
@@ -11,21 +10,8 @@ const reducer = (state = [], action) => {
       return state = action.user;
     case UNAUTHENTICATED:
       return state = [];
-    case SET_A_USER:
-      return state;
     default:
       return state;
-  }
-}
-
-const fetchUser = () => {
-  return (dispatch) => {
-    return axios.get('/api/user/me')
-      .then(result => result.data)
-      .then(users => dispatch({
-        type: SET_A_USER,
-        users
-      }))
   }
 }
 
@@ -48,4 +34,4 @@ const getLogout = (user, history) => {
 
 export default reducer;
 
-export { fetchUser, getLoggedIn, getLogout };
+export { getLoggedIn, getLogout };

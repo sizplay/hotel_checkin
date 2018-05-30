@@ -42,7 +42,10 @@ const createBook = (book, history) => {
         type: CREATE_BOOK,
         book
       }))
-  };
+      .then(result => {
+        history.push('/welcome');
+      })
+    };
 };
 
 const deleteBook = (book, history) => {
