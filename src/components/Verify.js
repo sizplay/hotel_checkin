@@ -2,11 +2,14 @@ import React from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import { connect } from 'react-redux';
+const config = require('../../config');
 //import DateTime from 'react-datetime';
 
 import { createUser } from '../redux/users';
 import { getLoggedIn, getLogout } from '../redux/user';
 
+const app_id = config.app_id;
+const app_key = config.app_key;
 class Verify extends React.Component {
 
   constructor(props) {
@@ -51,8 +54,8 @@ class Verify extends React.Component {
       image: imageSrc,
     }, {
         headers: {
-          app_id: '7fe4f3d8',
-          app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
+        app_id: app_id,
+          app_key: app_key
         }
       }).then((response) => {
         if (response.data.Errors || response.data.images[0].transaction.message === 'no match found') {
@@ -61,8 +64,8 @@ class Verify extends React.Component {
             image: imageSrc,
           }, {
               headers: {
-                app_id: '7fe4f3d8',
-                app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
+                app_id: app_id,
+                app_key: app_key
               }
             }).then((response) => {
               this.setState({
@@ -95,8 +98,8 @@ class Verify extends React.Component {
       subject_id: this.state.name
     }, {
         headers: {
-          app_id: '7fe4f3d8',
-          app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
+          app_id: app_id,
+          app_key: app_key
         }
       }).then((response) => {
         if (response.data.images) {
@@ -146,8 +149,8 @@ class Verify extends React.Component {
       gallery_name: "newGallery",
     }, {
         headers: {
-          app_id: '7fe4f3d8',
-          app_key: '8a56adee321afe967bf5d6a2d2b5ecef'
+          app_id: app_id,
+          app_key: app_key
         }
       }).then((response) => {
         this.setState({
